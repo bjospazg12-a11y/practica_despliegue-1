@@ -1,18 +1,18 @@
 # Dockerfile
-FROM node:20
+FROM node:20-slim
 
-# Crear directorio de la aplicación
 WORKDIR /usr/src/app
 
-# Copiar archivos al contenedor
+# Habilitar yarn (viene incluido con corepack en node 20)
+RUN corepack enable
+
 COPY package*.json ./
+
+# Instalar dependencias con yarn en vez de npm
+RUN yarn install && ls -la node_modules/express
+
 COPY index.js .
 
-# Instalar dependencias
-RUN npm install
-
-# Exponer el puerto de la aplicación
 EXPOSE 3000
 
-# Comando para iniciar la aplicación
 CMD ["node", "index.js"]
